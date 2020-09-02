@@ -20,26 +20,27 @@ function App() {
 	    likes: 0
     });
 
-    const repository = response.data;
-
-    setRepositories([...repositories, repository]);
+    setRepositories([...repositories, response.data]);
   }
  
   async function handleRemoveRepository(id) {
-    //const response = await api.delete('repositories/' + id)
+    await api.delete(`repositories/${id}`);
+    
+    setRepositories(repositories.filter(
+      repository => repository.id !== id
+    ))
   }
 
   return (
     <div>
       <ul data-testid="repository-list">
-      {repositories.map(repository => <li key={repository.id}>{repository.title} <button onClick={() => handleRemoveRepository(repository.id)}>Remover</button></li>)}
-        <li>
-          Repositório 1
-
-          <button onClick={() => handleRemoveRepository(1)}>
+      {repositories.map(repository => ( 
+        <li key={repository.id}>
+          {repository.title} 
+          <button onClick={() => handleRemoveRepository(repository.id)}>
             Remover
           </button>
-        </li>
+        </li>))}
       </ul>
 
       <button onClick={handleAddRepository}>Adicionar</button>
